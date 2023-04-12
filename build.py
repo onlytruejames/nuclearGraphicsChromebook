@@ -1,5 +1,5 @@
-txt = open("main.py", "r").read()
-open("main.py", "w").write(txt.replace("from cv2 import VideoCapture, cvtColor, COLOR_BGR2RGB", """from cv2 import imread, cvtColor, COLOR_BGR2RGB
+txt = open("../main.py", "r").read()
+open("../main.py", "w").write(txt.replace("from cv2 import VideoCapture, cvtColor, COLOR_BGR2RGB", """from cv2 import imread, cvtColor, COLOR_BGR2RGB
 class VideoCapture:
     def read():
         img = imread("capture.jpeg")

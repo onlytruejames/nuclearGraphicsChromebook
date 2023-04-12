@@ -1,3 +1,3 @@
-Move build.py and server.py into /nuclearGraphics and run them
+Clone this into the instance of nucleargraphics you want converted then run the python files.
 
 Then figure out what the IP address will be in chrome. I don't know what it'll be.
