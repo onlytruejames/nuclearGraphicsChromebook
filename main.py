@@ -11,7 +11,7 @@ def index():
 @app.route("/submit/", methods=["POST"])
 def submit():
     f = request.files['file']
-    f.save("../nuclearGraphics/capture.jpeg")
+    f.save("capture.jpeg")
     return ""
 
 app.run()
