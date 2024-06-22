@@ -1,3 +1,1 @@
-Clone this into the instance of nucleargraphics you want converted then run the python files.
-
-Then figure out what the IP address will be in chrome. I don't know what it'll be.
+Clone this into the instance of nucleargraphics you want converted, rename the folder to "camera", then run build.py, then run server.py, then find the address of the server, then run nuclearGraphics and input that address when it asks you, go to that address and follow 

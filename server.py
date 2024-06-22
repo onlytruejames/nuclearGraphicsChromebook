@@ -1,8 +1,9 @@
-import os, base64
 from flask import Flask, render_template, request
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+
+global midiUpdate
+midiUpdate = 0
 
 @app.route("/")
 def index():
@@ -11,7 +12,21 @@ def index():
 @app.route("/submit/", methods=["POST"])
 def submit():
     f = request.files['file']
-    f.save("../capture.jpeg")
+    f.save("capture.png")
     return ""
+
+@app.route('/midi/')
+def midiIn():
+    global midiUpdate
+    midiUpdate += 1
+    return ""
+
+@app.route('/midiReq/')
+def midiReq():
+    global midiUpdate
+    if midiUpdate > 0:
+        midiUpdate -= 1
+        return "note_on"
+    return "no"
 
 app.run()
